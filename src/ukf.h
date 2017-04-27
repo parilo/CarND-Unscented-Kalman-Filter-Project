@@ -16,6 +16,7 @@ public:
 
   typedef std::function<VectorXd (const VectorXd& state_vector)> mesaurement_function_t;
   typedef std::function<VectorXd (const VectorXd& state_vector)> fix_measurement_t;
+  typedef std::function<void (double nis)> nis_saver_t;
 
   ///* initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
@@ -117,11 +118,20 @@ public:
       int n_z,
       const MatrixXd& S_init,
       mesaurement_function_t measurement_function,
-      fix_measurement_t fix_measurement
+      fix_measurement_t fix_measurement,
+      nis_saver_t nis_saver
   );
 private:
 
   long long previous_timestamp_;
+
+  mesaurement_function_t lidar_measurement_function_;
+  fix_measurement_t lidar_fix_measurement_;
+  nis_saver_t lidar_nis_saver_;
+
+  mesaurement_function_t radar_measurement_function_;
+  fix_measurement_t radar_fix_measurement_;
+  nis_saver_t radar_nis_saver_;
 
 };
 
