@@ -14,6 +14,9 @@ using Eigen::VectorXd;
 class UKF {
 public:
 
+  typedef std::function<VectorXd (const VectorXd& state_vector)> mesaurement_function_t;
+  typedef std::function<VectorXd (const VectorXd& state_vector)> fix_measurement_t;
+
   ///* initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
 
@@ -108,6 +111,18 @@ public:
    * @param meas_package The measurement at k+1
    */
   void UpdateRadar(MeasurementPackage meas_package);
+
+  void Update(
+      MeasurementPackage meas_package,
+      int n_z,
+      const MatrixXd& S_init,
+      mesaurement_function_t measurement_function,
+      fix_measurement_t fix_measurement
+  );
+private:
+
+  long long previous_timestamp_;
+
 };
 
 #endif /* UKF_H */
